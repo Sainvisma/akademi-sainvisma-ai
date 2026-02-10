@@ -7,13 +7,12 @@ export default async function handler(req: any, res: any) {
     }
 
     const { prompt } = req.body || {};
-
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt kosong' });
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.0-pro' });
 
     const result = await model.generateContent(String(prompt));
     const text = result.response.text();
@@ -21,6 +20,6 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ result: text });
   } catch (err: any) {
     console.error(err);
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: err.message || 'Server error' });
   }
 }
