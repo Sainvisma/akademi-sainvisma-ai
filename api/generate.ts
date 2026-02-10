@@ -11,11 +11,20 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: 'Prompt kosong' });
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.0-pro' });
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-pro',
+    });
 
     const result = await model.generateContent(String(prompt));
-    const text = result.response.text();
+
+    const text =
+      result.response.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    if (!text) {
+      return res.status(500).json({ error: 'AI tidak mengembalikan teks' });
+    }
 
     return res.status(200).json({ result: text });
   } catch (err: any) {
