@@ -1,0 +1,7 @@
+{
+  "name": "Akademi Sainvisma AI",
+  "description": "A comprehensive creative suite powered by Gemini for branding, product photography, video scripting, and business mentoring.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
